@@ -27,7 +27,10 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/assign")
 def assign():
-    # db.execute("INSERT INTO users (username, gender, year, department) VALUES ('Nahom', 'M', '3', 'software')")
+    # db.execute("INSERT INTO users (username, gender, year, department) VALUES ('Abraham', 'M', '3', 'software')")
+    # db.execute("INSERT INTO users (username, gender, year, department) VALUES ('Zack', 'M', '3', 'software')")
+    # db.execute("INSERT INTO users (username, gender, year, department) VALUES ('Bemnet', 'M', '2', 'software')")
+    # db.execute("INSERT INTO users (username, gender, year, department) VALUES ('Abel', 'M', '3', 'software')")
     five = db.execute("SELECT * FROM users WHERE year = 5").fetchall()
     five.sort()
     # five.query.order_by(five.year.desc(),five.username.desc()).limit(10).all()
@@ -39,7 +42,9 @@ def assign():
                     "department":five[i][4]})
 
     six = db.execute("SELECT * FROM users WHERE year != 5 AND gender = 'M'").fetchall()
-    six.sort()
+    six.sort(key=srt1)
+    six.sort(key=srt2)
+    six.sort(key=srt3)
     for i in range(len(six)):
         db.execute("INSERT INTO Skilo (username, gender, year, department) VALUES (:username, :gender, :year, :department)",
                     {"username":six[i][1], 
@@ -58,6 +63,14 @@ def assign():
 
 
     db.commit()
-    print(six)
 
-    return jsonify(five)
+    return render_template("index.html", x=six)
+
+def srt1(k):
+    return k[1]
+
+def srt2(k):
+    return k[3]
+
+def srt3(k):
+    return k[4]
