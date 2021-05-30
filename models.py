@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import Column, String  
 from sqlalchemy.ext.declarative import declarative_base  
 from sqlalchemy.orm import sessionmaker
-import app
+
 
 
 class StudentModel(db.Model):
