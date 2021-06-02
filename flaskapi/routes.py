@@ -1,6 +1,6 @@
 #from flask import jsonify,request
 
-from flaskapi.models import StudentModel,AdminModel,Post
+from flaskapi.models import StudentModel,AdminModel,Post,RequestModel,AcceptedModel
 from sqlalchemy.orm import sessionmaker
 from flask_login import login_required, current_user, login_user, logout_user
 from flaskapi import db, api, app

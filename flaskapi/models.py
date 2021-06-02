@@ -34,6 +34,8 @@ class AdminModel(UserMixin,db.Model):
         return check_password_hash(self.admin_password,password)
 def load_user(admin_id):
     return AdminModel.query.get(int(admin_id))
+
+    
 class Post(db.Model):
      __tablename__ = 'posts'
      post_id = db.Column(db.Integer, primary_key=True)
@@ -41,4 +43,40 @@ class Post(db.Model):
     #  date_posted = db.Column(db.DateTime, nullable = False , default = DateTime.UtcNow())
      content = db.Column(db.Text , nullable = False)
      user_id = db.Column(db.Integer, db.ForeignKey('admin.admin_id'),nullable=False)
+
+class RequestModel(db.Model):
+        __tablename__ = 'requests'
+
+    students_id = db.Column(db.String(), primary_key = True)
+    firstname = db.Column(db.String(), nullable = False)
+    lastname = db.Column(db.String(), nullable = False)
+    gender = db.Column(db.String(), nullable = False)
+    email = db.Column(db.String(), nullable = False)
+    institution =  db.Column(db.String(), nullable = False)
+    department = db.Column(db.String(), nullable = False)
+    year = db.Column(db.Integer(), nullable = False)
+    description = db.Column(db.String(), nullable = False)
+    state = db.Column(db.String(), nullable = False)
+    city = db.Column(db.String(), nullable = False)
+    sub-city = db.Column(db.String(), nullable = False)
+    woreda = db.Column(db.String(), nullable = False) 
+
+
+class AcceptedModel(db.Model):
+        __tablename__ = 'accepted'
+
+    students_id = db.Column(db.String(), primary_key = True)
+    firstname = db.Column(db.String(), nullable = False)
+    lastname = db.Column(db.String(), nullable = False)
+    gender = db.Column(db.String(), nullable = False)
+    email = db.Column(db.String(), nullable = False)
+    institution =  db.Column(db.String(), nullable = False)
+    department = db.Column(db.String(), nullable = False)
+    year = db.Column(db.Integer(), nullable = False)
+    description = db.Column(db.String(), nullable = False)
+    state = db.Column(db.String(), nullable = False)
+    city = db.Column(db.String(), nullable = False)
+    sub-city = db.Column(db.String(), nullable = False)
+    woreda = db.Column(db.String(), nullable = False) 
+
 

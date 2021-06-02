@@ -5,7 +5,8 @@ from sqlalchemy.orm import sessionmaker
 from flask_login import LoginManager
 from flask_restful import Api,Resource
 from flask_login import login_required, current_user, login_user, logout_user
-
+from flask_marshmallow import Marshmallow
+from marshmallow import fields, Schema
 
 
 
@@ -28,6 +29,7 @@ login.init_app(app)
 
 db = SQLAlchemy()
 db.init_app(app)
+ma = Marshmallow(app)
 
 app.app_context().push()
 
@@ -35,4 +37,4 @@ app.app_context().push()
 from flaskapi.models import *
 from flaskapi import routes,posts
 
-api.add_resource(posts.PostResource, '/posts')
+api.add_resource(posts.PostAPI, '/posts')
