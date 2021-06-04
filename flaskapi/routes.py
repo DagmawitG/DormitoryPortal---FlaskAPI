@@ -1,12 +1,12 @@
-from flask import jsonify,request,session,abort
+from flask import jsonify,request,session,abort,Blueprint
 
 from flaskapi.models import UserModel,Post,RequestModel,AcceptedModel
 from sqlalchemy.orm import sessionmaker
 from flask_login import login_required, current_user, login_user, logout_user
-from flaskapi import db, api, app
+from flaskapi import db, api, app 
 
-
-@app.route('/login', methods=["POST"])
+bp = Blueprint('routes', __name__)
+@bp.route('/login', methods=["POST"])
 def login():
     if(current_user.is_authenticated):
         return jsonify({'message': "You've already logged in"})
@@ -32,7 +32,7 @@ def login():
     except Exception as e:
         return jsonify(str(e))
     
-@app.route('/logout', methods=["POST"])
+@bp.route('/logout', methods=["POST"])
 def logout():
     logout_user()
     session["role"] = ''

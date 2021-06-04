@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,Blueprint
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
@@ -34,10 +34,14 @@ ma = Marshmallow(app)
 app.app_context().push()
 
 
+
+
 from flaskapi.models import *
 from flaskapi import routes,posts,requests,accepted
-
+app.register_blueprint(routes.bp)
 api.add_resource(posts.PostAPI, '/posts','/posts/<int:post_id>')
 # api.add_resource(accepted.AcceptanceAPI, '/accepted')
 api.add_resource(requests.RequestAPI, '/requests')
+
+
 
