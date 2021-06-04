@@ -35,6 +35,9 @@ app.app_context().push()
 
 
 from flaskapi.models import *
-from flaskapi import routes,posts
+from flaskapi import routes,posts,requests,accepted
 
-api.add_resource(posts.PostAPI, '/posts')
+api.add_resource(posts.PostAPI, '/posts','/posts/<int:post_id>')
+# api.add_resource(accepted.AcceptanceAPI, '/accepted')
+api.add_resource(requests.RequestAPI, '/requests')
+

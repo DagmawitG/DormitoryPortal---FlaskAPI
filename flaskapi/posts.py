@@ -1,14 +1,22 @@
-from flask import Flask, request, session
-from flaskapi.models import StudentModel,AdminModel,Post,RequestModel,AcceptedModel
+from flask import Flask, request, session,jsonify,abort
+from flaskapi.models import UserModel,Post,RequestModel,AcceptedModel
 from sqlalchemy.orm import sessionmaker
 from flask_login import login_required, current_user, login_user, logout_user
 from flaskapi import db, api, app
 from flask_restful import Api,Resource
+from marshmallow import fields, Schema
+from flaskapi.schema import *
 
 class PostAPI(Resource):
     def get(self):
         all_posts = Post.query.all()
-        return posts_schema.dump(all_posts)
+        if all_posts:
+            result = posts_schema.dump(all_posts)
+            response = jsonify(result)
+            return response
+        else:
+            abort(404,"No Post Found!")
+
 
     def post(self):
         data = request.form
@@ -26,21 +34,37 @@ class PostAPI(Resource):
         
         db.session.add(new_post)
         db.session.commit()
-        return posts_schema.dump(new_post)
+        result =  posts_schema.dump(new_post)
+        response = jsonify(result)
+        response.status_code = 200
+        return response
     def put(self,post_id):
-        if request.is_json:
-            if 'title' in request.json:
-                post.title = request.json['title']
-            if 'content' in request.json:
-                post.content = request.json['content']
+        update_post = Post.query.filter_by(post_id=post_id).first()
+        if update_post:
+            if request.is_json:
+                title = request.json['title']
+                content = request.json['content']
+            else:
+                title = request.form['title']
+                content = request.form['content']
+            update_post.title = title
+            update_post.content = content
+            db.session.commit()
+
+            result = post_schema.dump(update_post)
+            response = jsonify(result)
+            response.status_code = 201
+            return response
         else:
-            if 'title' in request.form:
-                post.title = request.form['title']
-            if 'content' in request.form:
-                post.content = request.form['content']
+            abort(404,{"message":"No Post Found with the specified ID!"})
+
     def delete(self,post_id):
         post = Post.query.get_or_404(post_id)
-        db.session.delete(post)
-        db.session.commit()
-        return 'Deleted',204
+        if post:
+            db.session.delete(post)
+            db.session.commit()
+            abort(200,"Deleted")
+        else:
+             abort(404,"No Post Found with the specified ID!")
+
 
