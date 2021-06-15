@@ -8,38 +8,50 @@ from marshmallow import fields, Schema
 from flaskapi.schema import *
 
 class PostAPI(Resource):
-    def get(self):
-        all_posts = Post.query.all()
-        if all_posts:
-            result = posts_schema.dump(all_posts)
-            response = jsonify(result)
-            return response
+    def get(self,id=None):
+        if(id):
+            post = Post.query.filter_by(post_id = id)
+            if(post):
+                result = posts_schema.dump(post)
+                response = jsonify(result)
+                return response
+            else:
+                abort(404,"No Posts Found with the specified ID ")
         else:
-            abort(404,"No Post Found!")
+            all_posts = Post.query.all()
+            if all_posts:
+                result = posts_schema.dump(all_posts)
+                response = jsonify(result)
+                return response
+            else:
+                abort(404,"No Post Found!")
 
 
     def post(self):
+        
         data = request.form
         if request.is_json:
             new_post = Post(
                 title = request.json['title'],
-                content = request.json['content']
+                content = request.json['content'],
+                
             )
         else:
-             new_post = Post(
+            new_post = Post(
                 title = data['title'],
                 content = data['content']
+                
 
             )
-        
+    
         db.session.add(new_post)
         db.session.commit()
-        result =  posts_schema.dump(new_post)
+        result =  post_schema.dump(new_post)
         response = jsonify(result)
         response.status_code = 200
         return response
-    def put(self,post_id):
-        update_post = Post.query.filter_by(post_id=post_id).first()
+    def put(self,id):
+        update_post = Post.query.filter_by(post_id=id).first()
         if update_post:
             if request.is_json:
                 title = request.json['title']

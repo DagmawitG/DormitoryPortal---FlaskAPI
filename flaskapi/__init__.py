@@ -39,9 +39,9 @@ app.app_context().push()
 from flaskapi.models import *
 from flaskapi import routes,posts,requests,accepted
 app.register_blueprint(routes.bp)
-api.add_resource(posts.PostAPI, '/posts','/posts/<int:post_id>')
+api.add_resource(posts.PostAPI, '/posts','/posts/<int:id>')
 # api.add_resource(accepted.AcceptanceAPI, '/accepted')
-api.add_resource(requests.RequestAPI, '/requests')
+api.add_resource(requests.RequestAPI, '/requests','/requests/<int:id>')
 
 
 

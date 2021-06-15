@@ -1,5 +1,5 @@
 from flask import Flask, request, session,abort,jsonify
-from flaskapi.models import UserModel,Post,RequestModel,AcceptedModel
+from flaskapi.models import UserModel,Post,RequestModel
 # ,AcceptedModel,FiveKiloModel,MaleFiveKiloModel,FemaleFiveKiloModel,SixKiloModel,FBEKiloModel
 from sqlalchemy.orm import sessionmaker
 from flask_login import login_required, current_user, login_user, logout_user
@@ -10,14 +10,23 @@ from flaskapi.schema import *
 
 
 class RequestAPI(Resource):
-    def get(self):
-        all_requests = RequestModel.query.all()
-        if all_requests:
-            result = requests_schema.dump(all_requests)
-            response = jsonify(result)
-            return response
+    def get(self, id=None):
+        if(id):
+            requested = RequestModel.query.filter_by(r_id = id)
+            if(requested):
+                result = requests_schema.dump(requested)
+                response = jsonify(result)
+                return response
+            else:
+                abort(404,"No Requests Found with the specified ID ")
         else:
-            abort(404,"No Requests Found ")
+            all_requests = RequestModel.query.all()
+            if all_requests:
+                result = requests_schema.dump(all_requests)
+                response = jsonify(result)
+                return response
+            else:
+                abort(404,"No Requests Found ")
     def post(self):
         data = request.form
         
@@ -60,6 +69,14 @@ class RequestAPI(Resource):
         response = jsonify(result)
         return response
         
+    def delete(self,post_id):
+        requested = RequestModel.query.get_or_404(r_id)
+        if requested:
+            db.session.delete(requested)
+            db.session.commit()
+            abort(200,"Deleted")
+        else:
+             abort(404,"No Requests Found with the specified ID!")
 
     
 

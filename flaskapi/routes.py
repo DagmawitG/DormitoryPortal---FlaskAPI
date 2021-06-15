@@ -10,8 +10,8 @@ bp = Blueprint('routes', __name__)
 def login():
     if(current_user.is_authenticated):
         return jsonify({'message': "You've already logged in"})
-    username_entered = request.form.get('username')
-    password_entered = request.form.get('password')
+    username_entered = request.json['username']
+    password_entered = request.json['password']
     try:
         user = UserModel.query.filter_by(user_name=username_entered).first()
         if not user:

@@ -9,16 +9,32 @@ from marshmallow import fields, Schema
 from sqlalchemy import and_
 
 class AcceptanceAPI(Resource):
-    def get(self):
-        acceptants = AcceptModel.query.all()
-        if acceptants:
-            result = acceptants_schema.dump(acceptants)
-            response = jsonify(result)
-            return response
-        else:
-            abort(404,"No Accepted Students Found ")
+    def get(self,id=None):
+        if(id):
+            accepted = AcceptModel.query.filter_by(a_id = id)
+            if(accepted):
+                result = acceptant_schema.dump(accepted)
+                response = jsonify(result)
+                return response
+            else:
+                abort(404,"No Accepted Students Found with the specified ID ")
 
-    # def post(self,id):
+        else:
+            acceptants = AcceptModel.query.all()
+            if acceptants:
+                result = acceptants_schema.dump(acceptants)
+                response = jsonify(result)
+                return response
+            else:
+                abort(404,"No Accepted Students Found ")
+
+    def post(self):
+        data = request.form 
+        acceptants = AcceptedModel.query.all()
+        if acceptants.status == True:
+            year = AcceptedModel.query.filter_by(year=5)
+
+
 
 
     # def post(self):
