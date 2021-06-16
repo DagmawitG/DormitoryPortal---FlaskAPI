@@ -35,6 +35,7 @@ class RequestAPI(Resource):
         if request.is_json:
 
             new_request = RequestModel(
+
                 students_id = request.json['id'],
                 firstname =request.json['firstname'],
                 lastname = request.json['lastname'],

@@ -14,6 +14,7 @@ from functools import wraps
 
 bp = Blueprint('routes', __name__)
 
+
 @bp.route('/users', methods=["GET"])
 @token_required_admin
 
@@ -70,14 +71,14 @@ def login():
                 'exp' : datetime.utcnow() + timedelta(minutes = 30)
             }, app.config['SECRET_KEY']) 
             session["role"] = user.role
-            return make_response(jsonify({'token' : token.decode('UTF-8')}), 201)
+            return make_response(jsonify({'token' : token}), 201)
         elif user.role=="Student":
             token = jwt.encode({
                 'user_id': user.user_id,
                 'exp' : datetime.utcnow() + timedelta(minutes = 30)
             }, app.config['SECRET_KEY'])
             session["role"] = user.role
-            return make_response(jsonify({'token' : token.decode('UTF-8')}), 201)
+            return make_response(jsonify({'token' : token}), 201)
         return jsonify({'message':'hello'})
     # returns 403 if password is wrong
     return make_response(

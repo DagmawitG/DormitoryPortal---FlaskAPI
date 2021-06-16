@@ -18,7 +18,7 @@ class UserModel(UserMixin, db.Model):
     user_password = db.Column(db.String(120), nullable=False,unique=True)
     hashed_password = db.Column(db.String(120))
    
-    requests = db.relationship('RequestModel',backref='request',lazy=True)
+    
     role = db.Column(db.String(120), nullable=False)
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
@@ -40,7 +40,7 @@ class Post(db.Model):
 class RequestModel(db.Model):
     __tablename__ = 'requests'
     r_id = db.Column(db.Integer, primary_key=True)
-    requestedPerson_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
     students_id = db.Column(db.String(),unique=True)
     firstname = db.Column(db.String(), nullable = False)
     lastname = db.Column(db.String(), nullable = False)
