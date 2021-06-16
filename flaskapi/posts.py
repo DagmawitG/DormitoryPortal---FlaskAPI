@@ -10,7 +10,7 @@ import jwt
 from flaskapi.auth import *
 
 class PostAPI(Resource):
-    # @token_required_student
+    @token_required_student
     def get(self,id=None):
         if(id):
             post = Post.query.filter_by(post_id=id).first()
@@ -31,7 +31,7 @@ class PostAPI(Resource):
             else:
                 abort(404, message = "No Post Found!")
 
-    # @token_required_admin
+    @token_required_admin
     def post(self):
         
         data = request.form
@@ -55,7 +55,7 @@ class PostAPI(Resource):
         response.status_code = 200
         return response
 
-    # @token_required_admin
+    @token_required_admin
     def put(self,id):
         update_post = Post.query.filter_by(post_id=id).first()
         if update_post:
@@ -75,7 +75,7 @@ class PostAPI(Resource):
             return response
         else:
             abort(404, message="No Post Found with the specified ID!")
-    # @token_required_admin
+    @token_required_admin
     def delete(self,id):
         post = Post.query.filter_by(post_id=id).first()
         if post:

@@ -51,7 +51,7 @@ def token_required_student(f):
             current_user = UserModel.query.filter_by(user_id = data['user_id']).first()
         except:
             return {'message' : 'Token is invalid !!'}, 401
-        if current_user.role != 'Student':
+        if current_user.role != 'student':
             return {'message':'Not Authorized'},401
         # returns the current logged in users contex to the routes
         return f(*args, **kwargs)

@@ -11,7 +11,7 @@ from flaskapi.auth import *
 import jwt
 
 class RequestAPI(Resource):
-    # @token_required_admin
+    @token_required_admin
     def get(self, id=None):
         if(id):
             requested = RequestModel.query.filter_by(r_id=id).first()
@@ -32,7 +32,7 @@ class RequestAPI(Resource):
             else:
                 abort(404, message = "No Requests Found ")
 
-    # @token_required_student
+    @token_required_student
     def post(self):
         data = request.form
         
@@ -40,7 +40,7 @@ class RequestAPI(Resource):
 
             new_request = RequestModel(
 
-                students_id = request.json['id'],
+                students_id = request.json['students_id'],
                 firstname =request.json['firstname'],
                 lastname = request.json['lastname'],
                 gender = request.json['gender'],
@@ -51,11 +51,12 @@ class RequestAPI(Resource):
                 description = request.json['description'],
                 state = request.json['state'],
                 city = request.json['city'],
+                sub_city = request.json['sub_city'],
                 woreda = request.json['woreda']
             )
         else:
             new_request = RequestModel(
-                students_id =data['id'],
+                students_id =data['students_id'],
                 firstname =data['firstname'],
                 lastname = data['lastname'],
                 gender = data['gender'],
@@ -66,6 +67,7 @@ class RequestAPI(Resource):
                 description = data['description'],
                 state = data['state'],
                 city = data['city'],
+                sub_city = data['sub_city'],
                 woreda = data['woreda']
             )
 
@@ -78,7 +80,7 @@ class RequestAPI(Resource):
         response.status_code = 201
         return response
 
-    # @token_required_student   
+    @token_required_student   
     def delete(self,id):
         requested = RequestModel.query.filter_by(r_id=id).first()
         if requested:
