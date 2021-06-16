@@ -17,6 +17,13 @@ class RequestsSchema(ma.Schema):
 request_schema = RequestsSchema()
 requests_schema = RequestsSchema(many=True)
 
+class AcceptedSchema(ma.Schema):
+    class Meta:
+        fields = ("a_id", "requestedPerson_id", "status", "dormitoryPlace", "blockNumber", "dormNumber")
+        model = AcceptedModel
+accepted_schema = AcceptedSchema()
+accepteds_schema = AcceptedSchema(many=True)
+
 
 
 

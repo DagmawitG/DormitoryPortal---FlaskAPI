@@ -9,27 +9,30 @@ from marshmallow import fields, Schema
 from sqlalchemy import and_
 import jwt
 from flaskapi.auth import *
+from flaskapi.models import AcceptedModel
+from flaskapi.schema import accepted_schema
 
 class AcceptanceAPI(Resource):
     @token_required_admin
     def get(self,id=None):
         if(id):
-            accepted = AcceptModel.query.filter_by(a_id = id)
+            accepted = AcceptedModel.query.filter_by(a_id = id)
             if(accepted):
-                result = acceptant_schema.dump(accepted)
+                result = accepted_schema.dump(accepted)
                 response = jsonify(result)
                 return response
             else:
-                abort(404,"No Accepted Students Found with the specified ID ")
+                abort(404, mesage="No Accepted Students Found with the specified ID ")
 
         else:
-            acceptants = AcceptModel.query.all()
+            acceptants = AcceptedModel.query.all()
             if acceptants:
-                result = acceptants_schema.dump(acceptants)
+                result = accepted_schema.dump(acceptants)
                 response = jsonify(result)
                 return response
             else:
-                abort(404,"No Accepted Students Found ")
+                abort(404, message="No Accepted Students Found ")
+
     @token_required_admin
     def post(self):
         data = request.form 
