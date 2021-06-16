@@ -34,18 +34,22 @@ class AcceptanceAPI(Resource):
         data = request.form 
         acceptants = AcceptedModel.query.all()
         if acceptants.status == True:
-            filter1 = AcceptedModel.query.filter_by(year=5).all()
+            filter1 = AcceptedModel.query.filter_by(and_(year == 5 , gender='M')).all()
             if filter1:
                 filter1.dormitoryPlace = "5 kilo Campus"
                 filter1.blockNumber = 1
-            filter2 = AcceptedModel.query.filter_by(and_(year != 5 , gender='M')).all()  
+            filter2 = AcceptedModel.query.filter_by(and_(year == 5 , gender='F')).all()
             if filter2:
-                filter2.dormitoryPlace = "6 kilo Campus"
-                filter2.blockNumber = 1
-            filter3 = AcceptedModel.query.filter_by(and_(year != 5 , gender='F')).all()  
+                filter2.dormitoryPlace = "5 kilo Campus"
+                filter2.blockNumber = 2
+            filter2 = AcceptedModel.query.filter_by(and_(year != 5 , gender='M')).all()  
             if filter3:
-                filter3.dormitoryPlace = "FBE Campus"
-                filter3.blockNumber = 2
+                filter3.dormitoryPlace = "6 kilo Campus"
+                filter3.blockNumber = 1
+            filter4 = AcceptedModel.query.filter_by(and_(year != 5 , gender='F')).all()  
+            if filter4:
+                filter4.dormitoryPlace = "FBE Campus"
+                filter4.blockNumber = 2
             
 
 
