@@ -9,6 +9,7 @@ from marshmallow import fields, Schema
 from sqlalchemy import and_
 import jwt
 from flaskapi.auth import *
+
 class AcceptanceAPI(Resource):
     @token_required_admin
     def get(self,id=None):
