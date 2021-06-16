@@ -16,18 +16,17 @@ class UserModel(UserMixin, db.Model):
     user_name = db.Column(db.String(120), unique=True, nullable=False)
     user_email = db.Column(db.String(120), unique=True, nullable=False)
     user_password = db.Column(db.String(120), nullable=False,unique=True)
+    hashed_password = db.Column(db.String(120))
    
     requests = db.relationship('RequestModel',backref='request',lazy=True)
     role = db.Column(db.String(120), nullable=False)
     def set_password(self, password):
-        self.user_password = generate_password_hash(password)
+        self.hashed_password = generate_password_hash(password)
     def check_hash(self, password):
-        return check_password_hash(self.user_password,password)
+        return check_password_hash(self.hashed_password,password)
     def __repr__(self):
         return '<User {}>'.format(self.user_name)
-@login.user_loader
-def load_user(id):
-    return UserModel.query.get(int(id))
+
 
     
 class Post(db.Model):

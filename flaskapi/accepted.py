@@ -7,8 +7,10 @@ from flaskapi import db, api, app
 from flask_restful import Api,Resource
 from marshmallow import fields, Schema
 from sqlalchemy import and_
-
+import jwt
+from flaskapi.auth import *
 class AcceptanceAPI(Resource):
+    @token_required_admin
     def get(self,id=None):
         if(id):
             accepted = AcceptModel.query.filter_by(a_id = id)
@@ -27,12 +29,27 @@ class AcceptanceAPI(Resource):
                 return response
             else:
                 abort(404,"No Accepted Students Found ")
-
+    @token_required_admin
     def post(self):
         data = request.form 
         acceptants = AcceptedModel.query.all()
         if acceptants.status == True:
-            year = AcceptedModel.query.filter_by(year=5)
+            filter1 = AcceptedModel.query.filter_by(year=5).all()
+            if filter1:
+                filter1.dormitoryPlace = "5 kilo Campus"
+                filter1.blockNumber = 1
+            filter2 = AcceptedModel.query.filter_by(and_(year != 5 , gender='M')).all()  
+            if filter2:
+                filter2.dormitoryPlace = "6 kilo Campus"
+                filter2.blockNumber = 1
+            filter3 = AcceptedModel.query.filter_by(and_(year != 5 , gender='F')).all()  
+            if filter3:
+                filter3.dormitoryPlace = "FBE Campus"
+                filter3.blockNumber = 2
+            
+
+
+            
 
 
 
