@@ -10,7 +10,7 @@ from flaskapi.schema import *
 from flaskapi.auth import *
 import jwt
 class RequestAPI(Resource):
-    @token_required_admin
+    # @token_required_admin
     def get(self, id=None):
         if(id):
             requested = RequestModel.query.filter_by(r_id = id)
@@ -28,7 +28,7 @@ class RequestAPI(Resource):
                 return response
             else:
                 abort(404,"No Requests Found ")
-    @token_required_student
+    # @token_required_student
     def post(self):
         data = request.form
         
@@ -71,7 +71,7 @@ class RequestAPI(Resource):
         result = requests_schema.dump(new_request)
         response = jsonify(result)
         return response
-    @token_required_student   
+    # @token_required_student   
     def delete(self,post_id):
         requested = RequestModel.query.get_or_404(r_id)
         if requested:

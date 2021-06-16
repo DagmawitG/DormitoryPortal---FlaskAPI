@@ -11,7 +11,7 @@ import jwt
 from flaskapi.auth import *
 
 class AcceptanceAPI(Resource):
-    @token_required_admin
+    # @token_required_admin
     def get(self,id=None):
         if(id):
             accepted = AcceptModel.query.filter_by(a_id = id)
@@ -30,7 +30,7 @@ class AcceptanceAPI(Resource):
                 return response
             else:
                 abort(404,"No Accepted Students Found ")
-    @token_required_admin
+    # @token_required_admin
     def post(self):
         data = request.form 
         acceptants = AcceptedModel.query.all()
