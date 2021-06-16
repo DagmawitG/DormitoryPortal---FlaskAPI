@@ -7,12 +7,15 @@ from flask_restful import Api,Resource
 from flask_login import login_required, current_user, login_user, logout_user
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, Schema
+from flask_cors import CORS
+
+
 
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 
-
+CORS(app)
 
 
 
@@ -27,7 +30,7 @@ api = Api(app)
 login = LoginManager()
 login.init_app(app)
 bcrypt = Bcrypt(app)
-
+CORS(app)
 db = SQLAlchemy()
 db.init_app(app)
 ma = Marshmallow(app)

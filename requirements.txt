@@ -12,6 +12,7 @@ Flask-Login==0.5.0
 flask-marshmallow==0.14.0
 Flask-RESTful==0.3.9
 Flask-SQLAlchemy==2.5.1
+flask-cors-3.0.10
 greenlet==1.1.0
 importlib-metadata==4.3.1
 isort==5.8.0

@@ -35,25 +35,39 @@ class AcceptanceAPI(Resource):
 
     @token_required_admin
     def post(self):
-        data = request.form 
-        acceptants = AcceptedModel.query.all()
-        if acceptants.status == True:
-            filter1 = AcceptedModel.query.filter_by(and_(year == 5 , gender='M')).all()
-            if filter1:
-                filter1.dormitoryPlace = "5 kilo Campus"
-                filter1.blockNumber = 1
-            filter2 = AcceptedModel.query.filter_by(and_(year == 5 , gender='F')).all()
-            if filter2:
-                filter2.dormitoryPlace = "5 kilo Campus"
-                filter2.blockNumber = 2
-            filter2 = AcceptedModel.query.filter_by(and_(year != 5 , gender='M')).all()  
-            if filter3:
-                filter3.dormitoryPlace = "6 kilo Campus"
-                filter3.blockNumber = 1
-            filter4 = AcceptedModel.query.filter_by(and_(year != 5 , gender='F')).all()  
-            if filter4:
-                filter4.dormitoryPlace = "FBE Campus"
-                filter4.blockNumber = 2
+       
+
+        
+        requ = RequestModel.query.all()
+        student = AcceptedModel.query.filter_by(requestedPerson_id=requ.r_id).first()
+        if student:
+            abort(409, message="Student has already been assigned a dormitory")
+        else:
+            req = RequestModel.query.filter_by(students_id=student_id).first()
+            if not req:
+                abort(404, message="Student not found")
+              
+            if (req.year == 5 and req.gender == "M"):
+                dormitoryPlace = "5 Kilo"
+                blockNumber = 1
+            elif (req.year == 5 and req.gender == "F"):
+                dormitoryPlace = "5 Kilo"
+                blockNumber = 2
+            elif (req.year != 5 and req.gender == "F"):
+                dormitoryPlace = "FBE"
+                blockNumber = 2
+            elif (req.year != 5 and req.gender == "M"):
+                dormitoryPlace = "6 Kilo"
+                blockNumber = 1
+
+            accepted = AcceptedModel(requestedPerson_id=student_id,
+                                     status = True,
+                                     dormitoryPlace = dormitoryPlace,
+                                     blockNumber = blockNumber,
+                                     dormNumber = random.randint(1,150 ))
+                                     
+            db.session.add(accepted)
+            db.session.commit()
             
 
 
