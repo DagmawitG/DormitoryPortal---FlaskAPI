@@ -9,25 +9,29 @@ from marshmallow import fields, Schema
 from flaskapi.schema import *
 from flaskapi.auth import *
 import jwt
+
 class RequestAPI(Resource):
     # @token_required_admin
     def get(self, id=None):
         if(id):
-            requested = RequestModel.query.filter_by(r_id = id)
+            requested = RequestModel.query.filter_by(r_id=id).first()
             if(requested):
-                result = requests_schema.dump(requested)
+                result = request_schema.dump(requested)
                 response = jsonify(result)
+                response.status_code = 200
                 return response
             else:
-                abort(404,"No Requests Found with the specified ID ")
+                abort(404, message = "No Requests Found with the specified ID ")
         else:
             all_requests = RequestModel.query.all()
             if all_requests:
                 result = requests_schema.dump(all_requests)
                 response = jsonify(result)
+                response.status_code = 200
                 return response
             else:
-                abort(404,"No Requests Found ")
+                abort(404, message = "No Requests Found ")
+
     # @token_required_student
     def post(self):
         data = request.form
@@ -68,18 +72,23 @@ class RequestAPI(Resource):
         
         db.session.add(new_request)
         db.session.commit()
-        result = requests_schema.dump(new_request)
+
+        result = request_schema.dump(new_request)
         response = jsonify(result)
+        response.status_code = 201
         return response
+
     # @token_required_student   
-    def delete(self,post_id):
-        requested = RequestModel.query.get_or_404(r_id)
+    def delete(self,id):
+        requested = RequestModel.query.filter_by(r_id=id).first()
         if requested:
             db.session.delete(requested)
             db.session.commit()
-            abort(200,"Deleted")
+            response = jsonify({"message":"Successfully deleted"})
+            response.status_code = 202
+            return response
         else:
-             abort(404,"No Requests Found with the specified ID!")
+             abort(404, message = "No Requests Found with the specified ID!")
 
     
 
