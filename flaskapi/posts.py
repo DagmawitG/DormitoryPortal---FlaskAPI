@@ -13,21 +13,23 @@ class PostAPI(Resource):
     @token_required_student
     def get(self,id=None):
         if(id):
-            post = Post.query.filter_by(post_id = id)
+            post = Post.query.filter_by(post_id=id).first()
             if(post):
-                result = posts_schema.dump(post)
+                result = post_schema.dump(post)
                 response = jsonify(result)
+                response.status_code = 200
                 return response
             else:
-                abort(404,"No Posts Found with the specified ID ")
+                abort(404, message = "No Posts Found with the specified ID ")
         else:
             all_posts = Post.query.all()
             if all_posts:
                 result = posts_schema.dump(all_posts)
                 response = jsonify(result)
+                response.status_code = 200
                 return response
             else:
-                abort(404,"No Post Found!")
+                abort(404, message = "No Post Found!")
 
     @token_required_admin
     def post(self):
@@ -36,15 +38,15 @@ class PostAPI(Resource):
         if request.is_json:
             new_post = Post(
                 title = request.json['title'],
-                content = request.json['content'],
-                
+                date_posted = request.json['date_posted'],
+                content = request.json['content']
             )
+
         else:
             new_post = Post(
                 title = data['title'],
-                content = data['content']
-                
-
+                content = data['content'],
+                date_posted = data['date_posted'] 
             )
     
         db.session.add(new_post)
@@ -53,6 +55,7 @@ class PostAPI(Resource):
         response = jsonify(result)
         response.status_code = 200
         return response
+
     @token_required_admin
     def put(self,id):
         update_post = Post.query.filter_by(post_id=id).first()
@@ -72,15 +75,17 @@ class PostAPI(Resource):
             response.status_code = 201
             return response
         else:
-            abort(404,{"message":"No Post Found with the specified ID!"})
+            abort(404, message="No Post Found with the specified ID!")
     @token_required_admin
-    def delete(self,post_id):
-        post = Post.query.get_or_404(post_id)
+    def delete(self,id):
+        post = Post.query.filter_by(post_id=id).first()
         if post:
             db.session.delete(post)
             db.session.commit()
-            abort(200,"Deleted")
+            response = jsonify({"message":"Successfully deleted"})
+            response.status_code = 202
+            return response
         else:
-             abort(404,"No Post Found with the specified ID!")
+             abort(404, message = "No Post Found with the specified ID!")
 
 
