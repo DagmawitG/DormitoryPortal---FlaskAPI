@@ -8,7 +8,7 @@ from flask_login import login_required, current_user, login_user, logout_user
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, Schema
 
-
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 
@@ -26,6 +26,7 @@ app.config["DEBUG"] = True
 api = Api(app)
 login = LoginManager()
 login.init_app(app)
+bcrypt = Bcrypt(app)
 
 db = SQLAlchemy()
 db.init_app(app)
