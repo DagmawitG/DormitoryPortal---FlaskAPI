@@ -12,10 +12,17 @@ posts_schema = PostSchema(many = True)
 
 class RequestsSchema(ma.Schema):
     class Meta:
-        fields = ("r_id","requestedPerson_id","students_id","firstname","lastname","gender","email", "institution","department","year","description","state","city","sub_city","woreda")
+        fields = ("r_id","students_id","firstname","lastname","gender","email", "institution","department","year","description","state","city","sub_city","woreda")
         model = RequestModel
 request_schema = RequestsSchema()
 requests_schema = RequestsSchema(many=True)
+
+class AcceptedSchema(ma.Schema):
+    class Meta:
+        fields = ("a_id", "requestedPerson_id", "status", "dormitoryPlace", "blockNumber", "dormNumber")
+        model = AcceptedModel
+accepted_schema = AcceptedSchema()
+accepteds_schema = AcceptedSchema(many=True)
 
 
 

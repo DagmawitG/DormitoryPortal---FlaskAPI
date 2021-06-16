@@ -22,7 +22,7 @@ post_fields = {
 
 request_fields = {
     "r_id" : fields.Integer,
-    "requestedPerson_id" : fields.Nested(user_fields),
+    
     "students_id" : fields.String,
     "firstname" : fields.String,
     "lastname" : fields.String,

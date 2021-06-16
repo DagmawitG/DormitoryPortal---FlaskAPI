@@ -14,6 +14,7 @@ from functools import wraps
 
 bp = Blueprint('routes', __name__)
 
+
 @bp.route('/users', methods=["GET"])
 @token_required_admin
 
@@ -70,15 +71,15 @@ def login():
                 'exp' : datetime.utcnow() + timedelta(minutes = 30)
             }, app.config['SECRET_KEY']) 
             session["role"] = user.role
-            return make_response(jsonify({'token' : token.decode('UTF-8')}), 201)
-        elif user.role=="Student":
+            return make_response(jsonify({'token' : token}), 201)
+        elif user.role=="student":
             token = jwt.encode({
                 'user_id': user.user_id,
                 'exp' : datetime.utcnow() + timedelta(minutes = 30)
             }, app.config['SECRET_KEY'])
             session["role"] = user.role
-            return make_response(jsonify({'token' : token.decode('UTF-8')}), 201)
-        return jsonify({'message':'hello'})
+            return make_response(jsonify({'token' : token}), 201)
+        
     # returns 403 if password is wrong
     return make_response(
         'Could not verify,pwd',
@@ -87,36 +88,36 @@ def login():
     ) 
 
 
-@bp.route('/signup', methods =['POST'])
-def signup():
-    # creates a dictionary of the form data
-    data = request.form
+# @bp.route('/signup', methods =['POST'])
+# def signup():
+#     # creates a dictionary of the form data
+#     data = request.form
   
-    # gets name, email and password
-    user_id = data.get('user_id')
-    user_name, user_email = data.get('user_name'), data.get('user_email')
-    user_password = data.get('user_password')
+#     # gets name, email and password
+#     user_id = data.get('user_id')
+#     user_name, user_email = data.get('user_name'), data.get('user_email')
+#     user_password = data.get('user_password')
   
-    # checking for existing user
-    user = User.query\
-        .filter_by(user_id = user_id)\
-        .first()
-    if not user:
-        # database ORM object
-        user = User(
-            user_id = user_id,
-            user_name = user_name,
-            user_email = user_email,
-            user_password = generate_password_hash(user_password)
-        )
-        # insert user
-        db.session.add(user)
-        db.session.commit()
+#     # checking for existing user
+#     user = User.query\
+#         .filter_by(user_id = user_id)\
+#         .first()
+#     if not user:
+#         # database ORM object
+#         user = User(
+#             user_id = user_id,
+#             user_name = user_name,
+#             user_email = user_email,
+#             user_password = generate_password_hash(user_password)
+#         )
+#         # insert user
+#         db.session.add(user)
+#         db.session.commit()
   
-        return make_response('Successfully registered.', 201)
-    else:
-        # returns 202 if user already exists
-        return make_response('User already exists. Please Log in.', 202)
+#         return make_response('Successfully registered.', 201)
+#     else:
+#         # returns 202 if user already exists
+#         return make_response('User already exists. Please Log in.', 202)
      
 
 

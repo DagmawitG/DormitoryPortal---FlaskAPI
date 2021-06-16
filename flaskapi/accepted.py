@@ -9,43 +9,51 @@ from marshmallow import fields, Schema
 from sqlalchemy import and_
 import jwt
 from flaskapi.auth import *
+from flaskapi.models import AcceptedModel
+from flaskapi.schema import accepted_schema
+
 class AcceptanceAPI(Resource):
-    @token_required_admin
+    # @token_required_admin
     def get(self,id=None):
         if(id):
-            accepted = AcceptModel.query.filter_by(a_id = id)
+            accepted = AcceptedModel.query.filter_by(a_id = id)
             if(accepted):
-                result = acceptant_schema.dump(accepted)
+                result = accepted_schema.dump(accepted)
                 response = jsonify(result)
                 return response
             else:
-                abort(404,"No Accepted Students Found with the specified ID ")
+                abort(404, mesage="No Accepted Students Found with the specified ID ")
 
         else:
-            acceptants = AcceptModel.query.all()
+            acceptants = AcceptedModel.query.all()
             if acceptants:
-                result = acceptants_schema.dump(acceptants)
+                result = accepted_schema.dump(acceptants)
                 response = jsonify(result)
                 return response
             else:
-                abort(404,"No Accepted Students Found ")
+                abort(404, message="No Accepted Students Found ")
+
     @token_required_admin
     def post(self):
         data = request.form 
         acceptants = AcceptedModel.query.all()
         if acceptants.status == True:
-            filter1 = AcceptedModel.query.filter_by(year=5).all()
+            filter1 = AcceptedModel.query.filter_by(and_(year == 5 , gender='M')).all()
             if filter1:
                 filter1.dormitoryPlace = "5 kilo Campus"
                 filter1.blockNumber = 1
-            filter2 = AcceptedModel.query.filter_by(and_(year != 5 , gender='M')).all()  
+            filter2 = AcceptedModel.query.filter_by(and_(year == 5 , gender='F')).all()
             if filter2:
-                filter2.dormitoryPlace = "6 kilo Campus"
-                filter2.blockNumber = 1
-            filter3 = AcceptedModel.query.filter_by(and_(year != 5 , gender='F')).all()  
+                filter2.dormitoryPlace = "5 kilo Campus"
+                filter2.blockNumber = 2
+            filter2 = AcceptedModel.query.filter_by(and_(year != 5 , gender='M')).all()  
             if filter3:
-                filter3.dormitoryPlace = "FBE Campus"
-                filter3.blockNumber = 2
+                filter3.dormitoryPlace = "6 kilo Campus"
+                filter3.blockNumber = 1
+            filter4 = AcceptedModel.query.filter_by(and_(year != 5 , gender='F')).all()  
+            if filter4:
+                filter4.dormitoryPlace = "FBE Campus"
+                filter4.blockNumber = 2
             
 
 
