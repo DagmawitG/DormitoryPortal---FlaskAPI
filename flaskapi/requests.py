@@ -11,7 +11,7 @@ from flaskapi.auth import *
 import jwt
 
 class RequestAPI(Resource):
-    @token_required_admin
+    # @token_required_admin
     def get(self, id=None):
         if(id):
             requested = RequestModel.query.filter_by(r_id=id).first()
@@ -32,7 +32,7 @@ class RequestAPI(Resource):
             else:
                 abort(404, message = "No Requests Found ")
 
-    @token_required_student
+    # @token_required_student
     def post(self):
         data = request.form
         
@@ -80,7 +80,7 @@ class RequestAPI(Resource):
         response.status_code = 201
         return response
 
-    @token_required_student   
+    # @token_required_student   
     def delete(self,id):
         requested = RequestModel.query.filter_by(r_id=id).first()
         if requested:
