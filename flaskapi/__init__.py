@@ -9,12 +9,14 @@ from flask_marshmallow import Marshmallow
 from marshmallow import fields, Schema
 from flask_cors import CORS
 
+
+
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 CORS(app)
 
-
+CORS(app)
 
 
 
@@ -29,7 +31,7 @@ api = Api(app)
 login = LoginManager()
 login.init_app(app)
 bcrypt = Bcrypt(app)
-
+CORS(app)
 db = SQLAlchemy()
 db.init_app(app)
 ma = Marshmallow(app)
@@ -43,7 +45,7 @@ from flaskapi.models import *
 from flaskapi import routes,posts,requests,accepted
 app.register_blueprint(routes.bp)
 api.add_resource(posts.PostAPI, '/posts','/posts/<int:id>')
-# api.add_resource(accepted.AcceptanceAPI, '/accepted')
+api.add_resource(accepted.AcceptanceAPI, '/requests/<int:id>/accepted','/accepted/<int:id>','/accepted')
 api.add_resource(requests.RequestAPI, '/requests','/requests/<int:id>')
 
 
