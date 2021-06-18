@@ -36,10 +36,7 @@ class AcceptanceAPI(Resource):
 
     @token_required_admin
     def post(self, id):
-        # user = UserModel.query.all()
-        # user_id = user.user_id
-        # requ = RequestModel.query.all()
-        # student_id = requ.r_id
+        
         req = RequestModel.query.filter_by(r_id= id).first()
         if not req:
             abort(404, message="Request not found!")
@@ -67,6 +64,18 @@ class AcceptanceAPI(Resource):
             db.session.commit()
             return accepted_schema.dump(accepted)
             
+    @token_required_admin
+    def delete(self,id):
+        deleted = AcceptedModel.query.filter_by(a_id= id).first()
+        if not deleted:
+            abort(404, message="Request not found!")
+        else:
+            db.session.delete(deleted)
+            db.session.commit()
+            response = jsonify({"message":"Successfully deleted"})
+            response.status_code = 202
+            return response
+
 
 
             
