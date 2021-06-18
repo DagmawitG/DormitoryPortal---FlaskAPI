@@ -80,7 +80,7 @@ class RequestAPI(Resource):
         response.status_code = 201
         return response
 
-    @token_required_student   
+    @token_required_admin 
     def delete(self,id):
         requested = RequestModel.query.filter_by(r_id=id).first()
         if requested:
