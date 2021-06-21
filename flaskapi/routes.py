@@ -17,7 +17,7 @@ bp = Blueprint('routes', __name__)
 
 
 @bp.route('/users', methods=["GET"])
-# @token_required_admin
+@token_required_admin
 def get_all_users(current_user):
     # querying the database
     # for all the entries in it
@@ -39,7 +39,7 @@ def get_all_users(current_user):
 
 def login():
     # creates dictionary of form data
-    auth = request.get_json()
+    auth = request.form
   
     if not auth or not auth.get('user_id') or not auth.get('user_password'):
         # returns 401 if any email or / and password is missing
