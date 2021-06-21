@@ -23,7 +23,7 @@ class AcceptanceAPI(Resource):
                 response = jsonify(result)
                 return response
             else:
-                abort(404, mesage="No Accepted Students Found with the specified ID ")
+                abort(404, "No Accepted Students Found with the specified ID ")
 
         else:
             acceptants = AcceptedModel.query.all()
@@ -32,7 +32,7 @@ class AcceptanceAPI(Resource):
                 response = jsonify(result)
                 return response
             else:
-                abort(404, message="No Accepted Students Found ")
+                abort(404, "No Accepted Students Found ")
 
     @token_required_admin
     def post(self, id):
@@ -58,7 +58,13 @@ class AcceptanceAPI(Resource):
                                      status = True,
                                      dormitoryPlace = dormitoryPlace,
                                      blockNumber = blockNumber,
-                                     dormNumber = random.randint(1,150 ))
+                                     dormNumber = random.randint(1,150 ),
+                                     stud_id=req.students_id,
+                                     department = req.department,
+                                     year = req.year,
+                                     firstname = req.firstname,
+                                     lastname = req.lastname
+                                     )
                                      
             db.session.add(accepted)
             db.session.commit()
@@ -68,7 +74,7 @@ class AcceptanceAPI(Resource):
     def delete(self,id):
         deleted = AcceptedModel.query.filter_by(a_id= id).first()
         if not deleted:
-            abort(404, message="Request not found!")
+            abort(404, "Request not found!")
         else:
             db.session.delete(deleted)
             db.session.commit()
