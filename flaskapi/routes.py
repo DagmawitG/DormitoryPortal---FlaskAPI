@@ -17,7 +17,7 @@ bp = Blueprint('routes', __name__)
 
 
 @bp.route('/users', methods=["GET"])
-@token_required_admin
+# @token_required_admin
 def get_all_users(current_user):
     # querying the database
     # for all the entries in it
@@ -39,7 +39,7 @@ def get_all_users(current_user):
 
 def login():
     # creates dictionary of form data
-    auth = request.form
+    auth = request.get_json()
   
     if not auth or not auth.get('user_id') or not auth.get('user_password'):
         # returns 401 if any email or / and password is missing
@@ -71,14 +71,14 @@ def login():
                 'exp' : datetime.utcnow() + timedelta(minutes = 30)
             }, app.config['SECRET_KEY']) 
             session["role"] = user.role
-            return make_response(jsonify({'token' : token}), 201)
+            return make_response(jsonify({'token' : token}, {'role' : user.role}), 201)
         elif user.role=="student":
             token = jwt.encode({
                 'user_id': user.user_id,
                 'exp' : datetime.utcnow() + timedelta(minutes = 30)
             }, app.config['SECRET_KEY'])
             session["role"] = user.role
-            return make_response(jsonify({'token' : token}), 201)
+            return make_response(jsonify({'token' : token}, {'role' : user.role}), 201)
         
     # returns 403 if password is wrong
     return make_response(

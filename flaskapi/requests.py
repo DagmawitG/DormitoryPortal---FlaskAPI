@@ -32,7 +32,7 @@ class RequestAPI(Resource):
             else:
                 abort(404, message = "No Requests Found ")
 
-    @token_required_student
+    # @token_required_student
     def post(self):
         data = request.form
         
