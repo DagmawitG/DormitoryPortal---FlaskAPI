@@ -19,7 +19,8 @@ requests_schema = RequestsSchema(many=True)
 
 class AcceptedSchema(ma.Schema):
     class Meta:
-        fields = ("a_id", "requestedPerson_id", "status", "dormitoryPlace", "blockNumber", "dormNumber")
+        fields = ("a_id", "requestedPerson_id","firstname" ,
+    "lastname","stud_id","year","department", "status", "dormitoryPlace", "blockNumber", "dormNumber")
         model = AcceptedModel
 accepted_schema = AcceptedSchema()
 accepteds_schema = AcceptedSchema(many=True)

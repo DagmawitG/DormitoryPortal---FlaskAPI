@@ -62,6 +62,11 @@ class AcceptedModel(db.Model):
     __tablename__ = 'accepted'    
     a_id = db.Column(db.Integer, primary_key=True)
     requestedPerson_id = db.Column(db.Integer, db.ForeignKey('requests.r_id'),unique=True)
+    firstname = db.Column(db.String, nullable = False)
+    lastname = db.Column(db.String, nullable = False)
+    stud_id = db.Column(db.String, nullable = False)
+    year =  db.Column(db.Integer, nullable=False)
+    department =  db.Column(db.String, nullable = False)
     status = db.Column(db.Boolean(), nullable = False)
     dormitoryPlace = db.Column(db.String, nullable = False,default="FBE")
     blockNumber = db.Column(db.Integer, nullable = False,default=0)
